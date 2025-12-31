@@ -1,0 +1,41 @@
+[package]
+name = "fast_dedup"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+# 通用错误处理库，用于返回 Result 并自动打印错误上下文
+anyhow = "1.0"
+
+# 数据并行处理库，用于利用多核 CPU 加速 Hash 计算
+rayon = "1.7"
+
+# 高性能目录遍历库，支持递归读取文件系统
+walkdir = "2.4"
+
+# 命令行参数解析库，自动生成 --help 信息
+clap = { version = "4.5", features = ["derive"] }
+
+# 时间日期处理库，用于生成带时间戳的文件名
+chrono = "0.4"
+
+# MD5 哈希算法实现
+md-5 = "0.10"
+
+# SHA1 哈希算法实现
+sha1 = "0.10"
+
+# SHA2 (SHA256等) 哈希算法实现
+sha2 = "0.10"
+
+# Digest Trait 接口，用于统一不同哈希算法的调用方式
+digest = "0.10"
+
+# 十六进制编码/解码库，用于将 Hash 二进制数据转为可读字符串
+hex = "0.4"
+
+# 获取系统 CPU 逻辑核心数，用于设定默认并行线程数
+num_cpus = "1.16"
+
+# 终端进度条和 Spinner 库，用于显示美观的进度提示
+indicatif = "0.17"

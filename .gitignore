@@ -1,0 +1,42 @@
+# --- Rust 相关 ---
+# 忽略所有层级下的 target 目录（编译产物）
+# **/target/
+target/
+
+# 如果你手动运行过 cargo bench，忽略产生的输出
+out/
+
+# 忽略 Rust 编译器产生的临时备份文件
+**/*.rs.bk
+
+# 如果你在 Windows 上开发，忽略调试符号文件
+*.pdb
+
+
+# --- IDE & 编辑器 ---
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# IntelliJ / CLion / PyCharm
+.idea/
+*.iml
+
+# Vim 临时文件
+*.swp
+*~
+
+
+# --- 操作系统相关 ---
+.DS_Store
+Thumbs.db
+
+
+# --- 关于 Cargo.lock ---
+# 规则参考：
+# 1. 如果你的项目是一个【可执行程序 (Application)】，请注释掉下面这一行（即保留 Cargo.lock）
+# 2. 如果你的项目是一个【库 (Library)】，请保持下面这一行，不提交 Lock 文件
+# Cargo.lock
