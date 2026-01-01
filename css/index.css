@@ -1,0 +1,338 @@
+/* ==================== 全局布局设置 ==================== */
+html, body {
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+}
+
+/* ==================== 右侧区域：加载动画容器 (占据 50%) ==================== */
+.Z {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    order: 2;
+}
+
+/* ==================== 左侧区域：LED 文字墙 (占据 50%) ==================== */
+.led-screen {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3px; /* 减小间距以容纳更多列 */
+    order: 1;
+    
+    transform: translateZ(0);
+    will-change: filter;
+    
+    animation: colorRotate 10s linear infinite;
+}
+
+/* ==================== 加载动画样式 ==================== */
+.anime-box {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    background-color: white;
+    transform: translateZ(0);
+}
+
+.anime-point-1, .anime-point-2, .anime-point-3, .anime-point-4 {
+    position: absolute;
+    transform: translateZ(0);
+    will-change: width, height, left, top;
+}
+
+.anime-point-1 {
+    left: 0; top: 0; background-color: blue;
+    animation: anime-point-1 2s ease-in-out infinite;
+}
+
+.anime-point-2 {
+    right: 0; bottom: 0; background-color: red;
+    animation: anime-point-2 2s ease-in-out infinite;
+}
+
+.anime-point-3 {
+    left: 20px; top: -20px; width: 2px; height: 140px;
+    background-color: black;
+    animation: anime-point-3 2s ease-in-out infinite;
+}
+
+.anime-point-4 {
+    left: -20px; top: 20px; width: 140px; height: 2px;
+    background-color: black;
+    animation: anime-point-4 2s ease-in-out infinite;
+}
+
+.anime-point-5 { position: absolute; left: -20px; top: -2px; width: 140px; height: 2px; background-color: black; }
+.anime-point-6 { position: absolute; left: -20px; top: 100px; width: 140px; height: 2px; background-color: black; }
+.anime-point-7 { position: absolute; left: -2px; top: -20px; width: 2px; height: 140px; background-color: black; }
+.anime-point-8 { position: absolute; left: 100px; top: -20px; width: 2px; height: 140px; background-color: black; }
+
+@keyframes anime-point-1 {
+    0% { width: 20px; height: 20px; }
+    25% { width: 80px; height: 20px; }
+    50% { width: 80px; height: 80px; }
+    75% { width: 20px; height: 80px; }
+    100% { width: 20px; height: 20px; }
+}
+@keyframes anime-point-2 {
+    0% { width: 80px; height: 80px; }
+    25% { width: 20px; height: 80px; }
+    50% { width: 20px; height: 20px; }
+    75% { width: 80px; height: 20px; }
+    100% { width: 80px; height: 80px; }
+}
+@keyframes anime-point-3 {
+    0%, 100% { left: 20px; }
+    25%, 50% { left: 80px; }
+    75% { left: 20px; }
+}
+@keyframes anime-point-4 {
+    0%, 25% { top: 20px; }
+    50%, 75% { top: 80px; }
+    100% { top: 20px; }
+}
+
+/* ==================== 单列文字样式 (小字号版) ==================== */
+.col {
+    position: relative;
+    /* 字号调小为 25px */
+    width: 25px; 
+    height: 100%;
+    word-break: break-all;
+    transform: translateZ(0);
+}
+
+.col::before {
+    content: var(--text-set-1);
+    position: absolute;
+    inset: 0;
+    font-size: 25px;      /* 调小字号 */
+    line-height: 25px;    /* 与字号匹配 */
+    font-weight: bold;
+    color: transparent;
+    
+    /* 渐变色标调整为每 25px 一段 */
+    background: linear-gradient(
+        to bottom,
+        #feea96 0 25px, #edde42 25px 50px, #e2344a 50px 75px,
+        #cdab7e 75px 100px, #e16c8b 100px 125px, #dcdc7d 125px 150px,
+        #dcb42a 150px 175px, #d6a587 175px 200px, #984f71 200px 225px,
+        #221e34 225px 250px, #5e9a69 250px 275px, #a955e4 275px 300px,
+        #4e908f 300px 325px, #8d177e 325px 350px, #feea96 350px 375px,
+        #feea96 375px 400px, #edde42 400px 425px, #e2344a 425px 450px,
+        #cdab7e 450px 475px, #e16c8b 475px 500px, #dcdc7d 500px 525px,
+        #dcb42a 525px 550px, #d6a587 550px 575px, #984f71 575px 600px,
+        #221e34 600px 625px, #5e9a69 625px 650px, #a955e4 650px 675px,
+        #4e908f 675px 700px, #8d177e 700px 725px, #feea96 725px 750px,
+        #feea96 750px 775px, #edde42 775px 800px, #e2344a 800px 825px,
+        #cdab7e 825px 850px, #e16c8b 850px 875px, #dcdc7d 875px 900px,
+        #dcb42a 900px 925px, #d6a587 925px 950px, #984f71 950px 975px,
+        #221e34 975px 1000px, #5e9a69 1000px 1025px, #a955e4 1025px 1050px,
+        #4e908f 1050px 1075px, #8d177e 1075px 1100px
+    );
+    
+    background-clip: text;
+    -webkit-background-clip: text;
+    will-change: content;
+    animation: textScramble 0.6s steps(4) infinite;
+}
+
+/* ==================== 动画定义 ==================== */
+@keyframes colorRotate {
+    0% { filter: hue-rotate(0deg); }
+    100% { filter: hue-rotate(360deg); }
+}
+
+@keyframes textScramble {
+    0% { content: var(--text-set-1); }
+    25% { content: var(--text-set-2); }
+    50% { content: var(--text-set-3); }
+    75% { content: var(--text-set-4); }
+    100% { content: var(--text-set-5); }
+}
+
+/* ==================== 24列不同的随机数组配置 ==================== */
+/* 为了简化代码，这里使用较短的随机串循环，配合 animation-delay 制造差异 */
+
+.col:nth-child(1) {
+    --text-set-1: "101010101010101010101010101010101010";
+    --text-set-2: "010101010101010101010101010101010101";
+    --text-set-3: "110011001100110011001100110011001100";
+    --text-set-4: "001100110011001100110011001100110011";
+    --text-set-5: "100110011001100110011001100110011001";
+    animation-delay: 0.0s;
+}
+
+.col:nth-child(2) {
+    --text-set-1: "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    --text-set-2: "BCDEFGHIJKLMNOPQRSTUVWXYZA";
+    --text-set-3: "CDEFGHIJKLMNOPQRSTUVWXYZAB";
+    --text-set-4: "DEFGHIJKLMNOPQRSTUVWXYZABC";
+    --text-set-5: "EFGHIJKLMNOPQRSTUVWXYZABCD";
+    animation-delay: 0.05s;
+}
+
+.col:nth-child(3) {
+    --text-set-1: "!@#$%^&*()_+-=[]{}|;':,./<>?";
+    --text-set-2: "@#$%^&*()_+-=[]{}|;':,./<>?!";
+    --text-set-3: "#$%^&*()_+-=[]{}|;':,./<>?@!";
+    --text-set-4: "$%^&*()_+-=[]{}|;':,./<>?@#!";
+    --text-set-5: "%^&*()_+-=[]{}|;':,./<>?@#!$";
+    animation-delay: 0.1s;
+}
+
+.col:nth-child(4) {
+    --text-set-1: "QWERTYUIOPASDFGHJKLZXCVBNM123456";
+    --text-set-2: "WERTYUIOPASDFGHJKLZXCVBNM123456Q";
+    --text-set-3: "ERTYUIOPASDFGHJKLZXCVBNM123456QW";
+    --text-set-4: "RTYUIOPASDFGHJKLZXCVBNM123456QWE";
+    --text-set-5: "TYUIOPASDFGHJKLZXCVBNM123456QWER";
+    animation-delay: 0.15s;
+}
+
+.col:nth-child(5) {
+    --text-set-1: "000000111111222222333333444444555";
+    --text-set-2: "111111222222333333444444555555000";
+    --text-set-3: "222222333333444444555555000000111";
+    --text-set-4: "333333444444555555000000111111222";
+    --text-set-5: "444444555555000000111111222222333";
+    animation-delay: 0.02s;
+}
+
+.col:nth-child(6) {
+    --text-set-1: "SYSTEMERRORLOADINGDATACORRUPTMEM";
+    --text-set-2: "YSTEMERRORLOADINGDATACORRUPTMEMS";
+    --text-set-3: "STEMERRORLOADINGDATACORRUPTMEMSY";
+    --text-set-4: "TEMERRORLOADINGDATACORRUPTMEMSYS";
+    --text-set-5: "EMERRORLOADINGDATACORRUPTMEMSYST";
+    animation-delay: 0.12s;
+}
+
+.col:nth-child(7) {
+    --text-set-1: "AAAAAAAAAABBBBBBBBBBCCCCCCCCCCDD";
+    --text-set-2: "BBBBBBBBBBCCCCCCCCCCDDDDDDDDDDE";
+    --text-set-3: "CCCCCCCCCCDDDDDDDDDDEEEEEEEEEEF";
+    --text-set-4: "DDDDDDDDDDEEEEEEEEEEFFFFFFFFFFG";
+    --text-set-5: "EEEEEEEEEEFFFFFFFFFFGGGGGGGGGGH";
+    animation-delay: 0.22s;
+}
+
+.col:nth-child(8) {
+    --text-set-1: "<>/?;:'|{}[]=+-_)(*&^%$#@!~`";
+    --text-set-2: ">/?;:'|{}[]=+-_)(*&^%$#@!~`<";
+    --text-set-3: "/?;:'|{}[]=+-_)(*&^%$#@!~`<>";
+    --text-set-4: "?;:'|{}[]=+-_)(*&^%$#@!~`<>/";
+    --text-set-5: ";:'|{}[]=+-_)(*&^%$#@!~`<>/?";
+    animation-delay: 0.08s;
+}
+
+.col:nth-child(9) {
+    --text-set-1: "13579135791357913579135791357913";
+    --text-set-2: "35791357913579135791357913579135";
+    --text-set-3: "57913579135791357913579135791357";
+    --text-set-4: "79135791357913579135791357913579";
+    --text-set-5: "91357913579135791357913579135791";
+    animation-delay: 0.18s;
+}
+
+.col:nth-child(10) {
+    --text-set-1: "HELLOWORLDTHISISACSSANIMATIONTEST";
+    --text-set-2: "ELLOWORLDTHISISACSSANIMATIONTESTH";
+    --text-set-3: "LLOWORLDTHISISACSSANIMATIONTESTHE";
+    --text-set-4: "LOWORLDTHISISACSSANIMATIONTESTHEL";
+    --text-set-5: "OWORLDTHISISACSSANIMATIONTESTHELL";
+    animation-delay: 0.03s;
+}
+
+/* 第 11-20 列：重复循环使用不同参数以制造密集感 */
+.col:nth-child(11) { --text-set-1: "ZXCVBNMASDFGHJKLQWERTYUIOP1234"; --text-set-2: "XCVBNMASDFGHJKLQWERTYUIOP1234Z"; --text-set-3: "CVBNMASDFGHJKLQWERTYUIOP1234ZX"; --text-set-4: "VBNMASDFGHJKLQWERTYUIOP1234ZXC"; --text-set-5: "BNMASDFGHJKLQWERTYUIOP1234ZXCV"; animation-delay: 0.11s; }
+.col:nth-child(12) { --text-set-1: "098765432109876543210987654321"; --text-set-2: "987654321098765432109876543210"; --text-set-3: "876543210987654321098765432109"; --text-set-4: "765432109876543210987654321098"; --text-set-5: "654321098765432109876543210987"; animation-delay: 0.21s; }
+.col:nth-child(13) { --text-set-1: "&&&&&&||||||\\\\\\\\\\\\\\\\\\////"; --text-set-2: "||||||||\\\\\\\\\\\\\\\\////&&&&"; --text-set-3: "\\\\\\\\\\\\\\\\\\\\////&&&&||||||"; --text-set-4: "////////&&&&&&||||||\\\\\\\\\\"; --text-set-5: "&&&&&&||||||\\\\\\\\\\\\\\\\\\////"; animation-delay: 0.06s; }
+.col:nth-child(14) { --text-set-1: "POIUYTREWQASDFGHJKLZXCVBNM<>?"; --text-set-2: "OIUYTREWQASDFGHJKLZXCVBNM<>?P"; --text-set-3: "IUYTREWQASDFGHJKLZXCVBNM<>?PO"; --text-set-4: "UYTREWQASDFGHJKLZXCVBNM<>?POI"; --text-set-5: "YTREWQASDFGHJKLZXCVBNM<>?POIU"; animation-delay: 0.16s; }
+.col:nth-child(15) { --text-set-1: "ABABABABABABABABABABABABABABAB"; --text-set-2: "BABABABABABABABABABABABABABABA"; --text-set-3: "ABABABABABABABABABABABABABABAB"; --text-set-4: "BABABABABABABABABABABABABABABA"; --text-set-5: "ABABABABABABABABABABABABABABAB"; animation-delay: 0.01s; }
+.col:nth-child(16) { --text-set-1: "MNBVCXZLKJHGFDSAPOIUYTREWQ789"; --text-set-2: "NBVCXZLKJHGFDSAPOIUYTREWQ789M"; --text-set-3: "BVCXZLKJHGFDSAPOIUYTREWQ789MN"; --text-set-4: "VCXZLKJHGFDSAPOIUYTREWQ789MNB"; --text-set-5: "CXZLKJHGFDSAPOIUYTREWQ789MNBV"; animation-delay: 0.13s; }
+.col:nth-child(17) { --text-set-1: ">>>===---<<<>>>===---<<<>>>==="; --text-set-2: ">>===---<<<>>>===---<<<>>>=="; --text-set-3: ">=---<<<>>>===---<<<>>>==="; --text-set-4: ">---<<<>>>===---<<<>>>===--"; --text-set-5: "---<<<>>>===---<<<>>>===---"; animation-delay: 0.23s; }
+.col:nth-child(18) { --text-set-1: "1Q2W3E4R5T6Y7U8I9O0P1A2S3D4F"; --text-set-2: "Q2W3E4R5T6Y7U8I9O0P1A2S3D4F1"; --text-set-3: "2W3E4R5T6Y7U8I9O0P1A2S3D4F1Q"; --text-set-4: "W3E4R5T6Y7U8I9O0P1A2S3D4F1Q2"; --text-set-5: "3E4R5T6Y7U8I9O0P1A2S3D4F1Q2W"; animation-delay: 0.09s; }
+.col:nth-child(19) { --text-set-1: "xXxXxXxXxXxXxXxXxXxXxXxXxXxX"; --text-set-2: "XxXxXxXxXxXxXxXxXxXxXxXxXxXxX"; --text-set-3: "xXxXxXxXxXxXxXxXxXxXxXxXxXxX"; --text-set-4: "XxXxXxXxXxXxXxXxXxXxXxXxXxXxX"; --text-set-5: "xXxXxXxXxXxXxXxXxXxXxXxXxXxX"; animation-delay: 0.19s; }
+.col:nth-child(20) { --text-set-1: "000011110000111100001111000011"; --text-set-2: "000111100001111000011110000111"; --text-set-3: "001111000011110000111100001111"; --text-set-4: "011110000111100001111000011110"; --text-set-5: "111100001111000011110000111100"; animation-delay: 0.04s; }
+.col:nth-child(21) { --text-set-1: "LOREMIPSUMDOLORSITAMETCONSECTET"; --text-set-2: "OREMIPSUMDOLORSITAMETCONSECTETL"; --text-set-3: "REMIPSUMDOLORSITAMETCONSECTETLO"; --text-set-4: "EMIPSUMDOLORSITAMETCONSECTETLOR"; --text-set-5: "MIPSUMDOLORSITAMETCONSECTETLORE"; animation-delay: 0.14s; }
+.col:nth-child(22) { --text-set-1: "=-=--=-=-=-=--=-=-=-=--=-=-=-="; --text-set-2: "=-=-=--=-=-=-=--=-=-=-=--=-=-="; --text-set-3: "=-=-=--=-=-=-=--=-=-=-=--=-=-="; --text-set-4: "=-=-=--=-=-=-=--=-=-=-=--=-=-="; --text-set-5: "=-=-=--=-=-=-=--=-=-=-=--=-=-="; animation-delay: 0.24s; }
+.col:nth-child(23) { --text-set-1: "555555666666777777888888999999"; --text-set-2: "55556666667777778888889999995"; --text-set-3: "5566666677777788888899999955"; --text-set-4: "5666666777777888888999999555"; --text-set-5: "66666677777788888899999955555"; animation-delay: 0.07s; }
+.col:nth-child(24) { --text-set-1: "FVBNM,./;LKJHGFDSAQWERTYUIOP[]"; --text-set-2: "VBNM,./;LKJHGFDSAQWERTYUIOP[]F"; --text-set-3: "BNM,./;LKJHGFDSAQWERTYUIOP[]FV"; --text-set-4: "NM,./;LKJHGFDSAQWERTYUIOP[]FVB"; --text-set-5: "M,./;LKJHGFDSAQWERTYUIOP[]FVBN"; animation-delay: 0.17s; }
+
+/* ==================== 响应式设计 (移动端适配) ==================== */
+@media (max-width: 768px) {
+    body {
+        flex-direction: column; /* 手机端改为垂直排列 */
+    }
+
+    .Z {
+        width: 100%;
+        height: 50%; /* 手机端上下各占 50% */
+        order: 2;
+    }
+
+    .led-screen {
+        width: 100%;
+        height: 50%;
+        order: 1;
+        gap: 1px; /* 手机端间距更小 */
+    }
+
+    .col {
+        width: 12px; /* 手机端字号进一步缩小 */
+    }
+
+    .col::before {
+        font-size: 12px;
+        line-height: 12px;
+        /* 手机端渐变适配 12px */
+        background: linear-gradient(
+            to bottom,
+            #feea96 0 12px, #edde42 12px 24px, #e2344a 24px 36px,
+            #cdab7e 36px 48px, #e16c8b 48px 60px, #dcdc7d 60px 72px,
+            #dcb42a 72px 84px, #d6a587 84px 96px, #984f71 96px 108px,
+            #221e34 108px 120px, #5e9a69 120px 132px, #a955e4 132px 144px,
+            #4e908f 144px 156px, #8d177e 156px 168px, #feea96 168px 180px,
+            #feea96 180px 192px, #edde42 192px 204px, #e2344a 204px 216px,
+            #cdab7e 216px 228px, #e16c8b 228px 240px, #dcdc7d 240px 252px,
+            #dcb42a 252px 264px, #d6a587 264px 276px, #984f71 276px 288px,
+            #221e34 288px 300px, #5e9a69 300px 312px, #a955e4 312px 324px,
+            #4e908f 324px 336px, #8d177e 336px 348px, #feea96 348px 360px,
+            #feea96 360px 372px, #edde42 372px 384px, #e2344a 384px 396px,
+            #cdab7e 396px 408px, #e16c8b 408px 420px, #dcdc7d 420px 432px,
+            #dcb42a 432px 444px, #d6a587 444px 456px, #984f71 456px 468px,
+            #221e34 468px 480px, #5e9a69 480px 492px, #a955e4 492px 504px,
+            #4e908f 504px 516px, #8d177e 516px 528px, #feea96 528px 540px,
+            #feea96 540px 552px, #edde42 552px 564px, #e2344a 564px 576px,
+            #cdab7e 576px 588px, #e16c8b 588px 600px, #dcdc7d 600px 612px,
+            #dcb42a 612px 624px, #d6a587 624px 636px, #984f71 636px 648px,
+            #221e34 648px 660px, #5e9a69 660px 672px, #a955e4 672px 684px,
+            #4e908f 684px 696px, #8d177e 696px 708px, #feea96 708px 720px,
+            #feea96 720px 732px, #edde42 732px 744px, #e2344a 744px 756px,
+            #cdab7e 756px 768px, #e16c8b 768px 780px, #dcdc7d 780px 792px,
+            #dcb42a 792px 804px, #d6a587 804px 816px, #984f71 816px 828px,
+            #221e34 828px 840px, #5e9a69 840px 852px, #a955e4 852px 864px,
+            #4e908f 864px 876px, #8d177e 876px 888px, #feea96 888px 900px,
+            #feea96 900px 912px, #edde42 912px 924px, #e2344a 924px 936px,
+            #cdab7e 936px 948px, #e16c8b 948px 960px, #dcdc7d 960px 972px,
+            #dcb42a 972px 984px, #d6a587 984px 996px, #984f71 996px 1008px,
+            #221e34 1008px 1020px, #5e9a69 1020px 1032px, #a955e4 1032px 1044px,
+            #4e908f 1044px 1056px, #8d177e 1056px 1068px
+        );
+    }
+}
