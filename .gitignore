@@ -12,6 +12,8 @@ out/
 # 如果你在 Windows 上开发，忽略调试符号文件
 *.pdb
 
+# 环境变量
+*.env
 
 # --- IDE & 编辑器 ---
 # VS Code

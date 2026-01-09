@@ -7,7 +7,7 @@ ___
 
 ## *AIntelligence*
 
-oneAPI
+### oneAPI
 
 - <https://openrouter.ai/>
 - <https://aihubmix.com/>
@@ -17,25 +17,33 @@ oneAPI
   - <https://github.com/chatanywhere/GPT_API_free>
   - <https://gitee.com/chatanywhere/GPT_API_free>
 
-LEADERBOARDs
+### LEADERBOARDs
 
 - <https://artificialanalysis.ai/>
 - <https://lmarena.ai/zh/leaderboard>
 - <https://agentset.ai/>
 - <https://openlm.ai/leaderboard/>
+- <https://www.datalearner.com/benchmarks>
 
-KNOWLEDGEs
+### KNOWLEDGEs
 
 - <https://huggingface.co/>
 - <https://www2.statmt.org/wmt25/>
 - <https://lmsys.org/blog/>
 
-SKILLx
+### x
 
 - <https://matrix.tencent.com/ai-detect/>
-- <https://smithery.ai/>
-- <https://infographic.antv.vision/>
+- <https://decopy.ai/zh/ai-detector/>
+- <https://dr.miromind.ai/>
 - <https://browserfly.app/>
+- <https://infographic.antv.vision/>
+- <https://smithery.ai/>
+
+### PDFs
+
+- <https://mineru.net/OpenSourceTools/Extractor>
+- <https://open.noedgeai.com/>
 
 ___
 
@@ -140,4 +148,42 @@ ___
    - 程序不自动推断输出文件名，必须显式指定第3个参数。
    - 请确保输出路径的目录具有写入权限。
  ============================================================================
+```
+
+### OCR
+
+```shell
+/*
+ * ============================================================
+ * CLI 使用说明 (Command Line Interface Usage)
+ * ============================================================
+ *
+ * 编译项目:
+ *   cargo build --release
+ *
+ * 基本运行格式:
+ *   cargo run -- --input <文件路径> --output-dir <目录路径>
+ *
+ * 1. 识别图片文件:
+ *    说明: 识别指定的图片，并将结果保存为 .txt 文件。
+ *    示例:
+ *      cargo run -- --input ./images/photo.jpg --output-dir ./results
+ *    结果: 在 ./results 目录下生成 photo.txt
+ *
+ * 2. 识别 PDF 文件 (多页):
+ *    说明: 自动检测 PDF 总页数，并循环识别每一页。
+ *    示例:
+ *      cargo run -- --input ./docs/manual.pdf --output-dir ./results
+ *    结果: 在 ./results 目录下生成 manual_page_1.txt, manual_page_2.txt ...
+ *
+ * 3. 参数详解:
+ *    --input, -i:   [必填] 指定要识别的文件路径 (支持 jpg, png, pdf 等)。
+ *    --output-dir, -o: [必填] 指定识别结果的存放目录。如果目录不存在会自动创建。
+ *    --help, -h:    查看帮助信息。
+ *
+ * 注意事项:
+ *    - 请确保当前目录下存在 .env 文件，并正确配置了 BAIDU_OCR_API_KEY 和 BAIDU_OCR_SECRET_KEY。
+ *    - 程序不会在控制台打印识别出的文字，只会打印处理进度。
+ * ============================================================
+ */
 ```

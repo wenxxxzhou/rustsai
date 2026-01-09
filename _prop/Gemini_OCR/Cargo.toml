@@ -1,0 +1,30 @@
+[package]
+name = "Gemini_OCR"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+# dotenvy: 用于从 .env 文件中加载环境变量，避免敏感信息硬编码
+dotenvy = "0.15"
+
+# reqwest: HTTP 客户端
+reqwest = { version = "0.11", features = ["json"] }
+
+# tokio: 异步运行时
+tokio = { version = "1", features = ["full"] }
+
+# serde: 序列化/反序列化
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# base64: Base64 编码
+base64 = "0.21"
+
+# anyhow: 错误处理
+anyhow = "1.0"
+
+# clap: 命令行参数解析
+clap = { version = "4.4", features = ["derive"] }
+
+# lopdf: 读取 PDF 信息（页数）
+lopdf = "0.31"

@@ -194,6 +194,8 @@ fn write_srt(path: &Path, entries: &[(String, String, String)], fps: f64) -> std
 
  使用示例：
 
+    0. .\target\release\edl2srt.exe 15.98 "~.edl" "~.srt"
+
    1. 基本用法 (当前目录):
       $ ./edl_to_srt 24 input.edl output.srt
 

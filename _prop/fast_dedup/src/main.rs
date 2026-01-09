@@ -637,6 +637,7 @@ fn format_bytes(bytes: u64) -> String {
     ============================================================
     参数解释与使用示例
     ============================================================
+    0. .\target\release\fast_dedup.exe --directory-path "" --match-mode Hash --algorithm SHA256 --recurse
 
     1. -DirectoryPath (必填): 要扫描的根目录路径。
        示例: --directory-path "D:\Data"
