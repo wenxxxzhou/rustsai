@@ -1,11 +1,12 @@
-# [可更改] 这个工作流的名称，改成了通用名称，会显示在 GitHub Actions 页面的左侧列表里
+# [可更改] 这个工作流的名称，会显示在 GitHub Actions 页面的左侧列表里
 name: Releases
 
-# [保持原样] 触发条件：仅仅在推送以 'v-edl2srt-' 开头的 tag 时触发（如 v-edl2srt-1.0.0）
+# [保持原样] 触发条件：推送以 'edl2srt-v' 或 'other-v' 开头的 tag 时触发工作流
 on:
   push:
     tags:
-      - 'v-edl2srt-*'  # [可更改] 为edl2srt项目设置特定的tag前缀，避免与其他项目冲突
+      - 'edl2srt-v*'  # [可更改] edl2srt项目的tag前缀（如 edl2srt-v1.0.0）
+      - 'other-v*'    # [可更改] other-project项目的tag前缀（如 other-v2.1.3）
 
 # [保持原样] 必须要给的权限，否则 Actions 没有权利去你的仓库里创建 Release
 permissions:
@@ -15,9 +16,10 @@ jobs:
   # ==========================================
   # 项目 1：edl2srt
   # ==========================================
-  # [可更改] 这个 Job 的名字，用于区分不同项目的编译任务
   release-edl2srt:
-    # [可更改] 运行环境。因为是编译 Windows exe，所以用 windows-latest。如果是 Linux 项目可改为 ubuntu-latest
+    # 【关键修复】门卫判断：startsWith 不支持 *，必须去掉 *。只有以 'edl2srt-v' 开头才运行
+    if: startsWith(github.ref_name, 'edl2srt-v')
+    # [可更改] 运行环境。因为是编译 Windows exe，所以用 windows-latest
     runs-on: windows-latest
 
     steps:
@@ -28,61 +30,63 @@ jobs:
       # [保持原样] 第 2 步：安装 Rust 环境
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
-        # [可更改] 如果以后要编译 32 位，或者换 GNU 工具链，改这里的 targets
         with:
           targets: x86_64-pc-windows-msvc
 
       # [保持原样] 第 3 步：编译项目
       - name: Build Executable
         run: |
-          # [可更改] 如果你的项目换了目录，改这里的 cd 路径
           cd _prop/edl2srt
-          # [保持原样] 执行编译
           cargo build --release --target x86_64-pc-windows-msvc
 
-      # [新增/可更改] 第 4 步：重命名 exe 文件
+      # [修改] 第 4 步：重命名 exe 文件，提取出 v* 部分作为名字
       - name: Rename Executable
         run: |
-          # [可更改] 进入编译产物所在的文件夹
           cd _prop/edl2srt/target/x86_64-pc-windows-msvc/release/
-          # [可更改] 把原来的 edl2srt.exe 改名。
-          # ${{ github.ref_name }} 会自动变成你的版本号，如 v-edl2srt-1.0.0
-          # 你可以自由调整 NewName 后面的名字格式，比如去掉 windows-x64 也行
-          Rename-Item -Path edl2srt.exe -NewName edl2srt-${{ github.ref_name }}-windows-x64.exe
+          # 获取完整的 tag 名（如 edl2srt-v1.0.0）
+          $full_tag = "${{ github.ref_name }}"
+          # 截取从 "-v" 开始的部分，得到 "v1.0.0"
+          $version = $full_tag.Substring($full_tag.IndexOf('-v') + 1)
+          # 把 exe 改名为 edl2srt-v1.0.0-windows-x64.exe
+          Rename-Item -Path edl2srt.exe -NewName "edl2srt-$version-windows-x64.exe"
 
       # [保持原样] 第 5 步：上传到 GitHub Releases
       - name: Upload to Release
         uses: softprops/action-gh-release@v1
         with:
-          # [可更改] 这是你要打包上传的文件。注意这里填的是刚刚重命名后的新文件名
+          # 【修改点】这里用通配符 v* 匹配刚才改名后的文件
           files: |
-            _prop/edl2srt/target/x86_64-pc-windows-msvc/release/edl2srt-${{ github.ref_name }}-windows-x64.exe
-            
-          # [保持原样] 自动获取你刚推上来的 tag 名（如 v-edl2srt-1.0.0），不用手动改
+            _prop/edl2srt/target/x86_64-pc-windows-msvc/release/edl2srt-v*-windows-x64.exe
           tag_name: ${{ github.ref_name }}
-          
-          # [可更改] Release 的大标题。现在是 "edl2srt v-edl2srt-1.0.0"，你可以改成纯版本号或加日期
-          name: edl2srt ${{ github.ref_name }}
-          
-          # [可更改] Release 的正文。现在指向你的 Changelog 文件。
-          # 如果哪天你想直接在代码里写死正文，就把这行删掉，改成 body: |
-          #   这里写更新内容
+          name: ${{ github.ref_name }}
           body_path: _prop/edl2srt/CHANGELOG.md
-          
-          # [可更改] 是否标记为"预发布"（测试版）。
-          # true: 列表里会显示橙色 Pre-release 标签，不会作为推荐正式版
-          # false: 正式发布
           prerelease: false
-          
-          # [可更改] 是否保存为草稿。
-          # true: Actions 跑完后不公开，需要你去网页点"Publish"才发布
-          # false: 跑完直接公开发布
           draft: false
-          
-        # [保持原样] 身份验证，不用动
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # ==========================================
   # 【未来扩展】项目 2：其他项目
-  # 以后如果有新项目，照着上面的结构在下面加一个 job 即可
+  # ==========================================
+  release-other-project:
+    # 【关键修复】门卫判断：去掉 *。只有以 'other-v' 开头才运行
+    if: startsWith(github.ref_name, 'other-v')
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        
+      # ... 在这里添加你第二个项目的 编译、改名 等步骤
+        
+      - name: Upload to Release
+        uses: softprops/action-gh-release@v1
+        with:
+          # files: 你的产物路径
+          tag_name: ${{ github.ref_name }}
+          # name: ${{ github.ref_name }}
+          # body_path: 你的 Changelog 路径
+          prerelease: false
+          draft: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
