@@ -1,4 +1,4 @@
-[简体中文](../README.md) | [ENG](./README_en.md)
+[简体中文](../README.md) | ENG
 
 ___
 

@@ -39,6 +39,6 @@ Thumbs.db
 
 # --- 关于 Cargo.lock ---
 # 规则参考：
-# 1. 如果你的项目是一个【可执行程序 (Application)】，请注释掉下面这一行（即保留 Cargo.lock）
-# 2. 如果你的项目是一个【库 (Library)】，请保持下面这一行，不提交 Lock 文件
+# 或1. 如果你的项目是一个【可执行程序 (Application)】，请注释掉下面这一行（即保留 Cargo.lock）
+# 或2. 如果你的项目是一个【库 (Library)】，请保持下面这一行，不提交 Lock 文件
 # Cargo.lock
