@@ -1,5 +1,5 @@
 # [可更改] 这个工作流的名称，会显示在 GitHub Actions 页面的左侧列表里
-name: Releases
+name: ReleaseX
 
 # [保持原样] 触发条件：推送以 'edl2srt-v' 或 'other-v' 开头的 tag 时触发工作流
 on:
@@ -25,7 +25,7 @@ jobs:
     steps:
       # [保持原样] 第 1 步：拉取代码到 Actions 虚拟机
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       # [保持原样] 第 2 步：安装 Rust 环境
       - name: Setup Rust
@@ -75,7 +75,7 @@ jobs:
     
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         
       # ... 在这里添加你第二个项目的 编译、改名 等步骤
         
