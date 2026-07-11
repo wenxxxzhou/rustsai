@@ -4,3 +4,11 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+# 用来“猜测”未知文本文件的编码
+chardetng = "0.1"
+
+# 用来按指定编码把字节解码成 Rust 的 UTF-8 字符串
+encoding_rs = "0.8"
+
+# 用来生成时间戳，例如 20260711_194900
+chrono = "0.4"

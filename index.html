@@ -1,56 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ReAI</title>
-        <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="./css/base.css" />
-    <link rel="stylesheet" href="./css/index.css" />
-  </head>
-  <body>
-    <!-- 右侧：加载动画 (order: 2) -->
-    <div class="Z">
-      <div class="anime-box">
-        <div class="anime-point-1"></div>
-        <div class="anime-point-2"></div>
-        <div class="anime-point-3"></div>
-        <div class="anime-point-4"></div>
-        <div class="anime-point-5"></div>
-        <div class="anime-point-6"></div>
-        <div class="anime-point-7"></div>
-        <div class="anime-point-8"></div>
-      </div>
-    </div>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Matrix Rain</title>
+  <link rel="icon" href="./assets/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="./assets/css/base.css" />
+  <link rel="stylesheet" href="./assets/css/index.css" />
+</head>
+<body>
+  <canvas id="matrixCanvas" aria-label="Matrix rain background"></canvas>
 
-    <!-- 左侧：LED 文字墙 (order: 1) -->
-    <div class="led-screen">
-      <!-- 增加到 24 列以显示更多内容 -->
-      <div class="col"></div>
-      <div class="col"></div>
-      <div class="col"></div>
-      <div class="col"></div>
-      <div class="col"></div>
-      <div class="col"></div>
-      <div class="col"></div>
-      <div class="col"></div>
-      <div class="col"></div>
-      <div class="col"></div>
-      <div class="col"></div>
-      <div class="col"></div>
-      <div class="col"></div>
-      <div class="col"></div>
-      <div class="col"></div>
-      <div class="col"></div>
-      <div class="col"></div>
-      <div class="col"></div>
-      <div class="col"></div>
-      <div class="col"></div>
-      <div class="col"></div>
-      <div class="col"></div>
-      <div class="col"></div>
-      <div class="col"></div>
+  <div class="vignette"></div>
+  <div class="scanlines"></div>
+
+  <aside class="hud" aria-label="project info">
+    <div class="hud__line">
+      PROJECT_prop:
+      <span id="projectName">loading...</span>
     </div>
-  </body>
+  </aside>
+
+  <script src="./assets/js/index.js"></script>
+</body>
 </html>

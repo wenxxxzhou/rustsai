@@ -1,0 +1,65 @@
+# @Claude Sonnet 5
+# wow~ ⊙o⊙
+# services 是 compose 文件的顶层关键字，用来定义"这个配置文件里包含哪些服务（容器）"
+# 一个 compose 文件可以定义多个服务，我们这里只定义了一个
+services:
+
+  # wlk 是这个服务的自定义名称（相当于给这个容器配置起个"昵称"）
+  # 这个名字只在 compose 文件内部使用，用于日志显示和管理，可以随意改成别的名字
+  wlk:
+
+    # image 指定要使用哪个 Docker 镜像
+    # 这里直接指向 GHCR（GitHub Container Registry）上已经构建好的 WhisperLiveKit 镜像
+    # 冒号后面的部分是"标签"（tag），代表具体版本和硬件类型（cu129 = 支持 NVIDIA CUDA 12.9，diarization-sortformer = 带说话人分离功能）
+    image: ghcr.io/quentinfuxa/whisperlivekit:v0.2.22-cu129-diarization-sortformer
+
+    # container_name 给实际运行起来的容器指定一个固定名字
+    # 如果不写这一行，Docker 会自动生成一个随机名字（比如 whisperlivekit_wlk_1）
+    # 指定固定名字后，你在敲 docker logs、docker stop 等命令时可以直接用 wlk 这个名字，更方便
+    container_name: wlk
+
+    # ports 用来做"端口映射"，格式是 "主机端口:容器内部端口"
+    # 意思是：把容器内部运行的服务（监听在 8000 端口）映射到你 Windows 电脑本机的 8000 端口
+    # 这样你才能在浏览器用 localhost:8000 访问到容器里跑的网页服务
+    # http://localhost:8000/：这里访问以替代 0.0.0.0:8000，否则无法调用权限
+    ports:
+      - "8000:8000"
+
+    # volumes 用来做"数据持久化"，避免容器删除后数据也跟着消失
+    # 这里定义了一条挂载规则：把容器内部路径 /root/.cache/huggingface/hub（存放下载的语音模型文件）
+    # 映射到一个叫 hf_cache 的 Docker 数据卷（相当于一个专门存这些文件的独立存储空间）
+    # 好处：即使你以后删除并重建容器，之前下载好的模型文件依然保留在这个数据卷里，不需要重新下载
+    volumes:
+      - hf_cache:/root/.cache/huggingface/hub
+
+    # deploy 这部分是用来声明"这个容器需要用到哪些硬件资源"
+    # 这里的写法专门用来告诉 Docker：这个容器需要调用 GPU
+    deploy:
+      resources:
+        reservations:
+          devices:
+            # driver 指定用哪个厂商的驱动，nvidia 表示这是给 NVIDIA 显卡用的
+            - driver: nvidia
+              # count 表示要用几个 GPU，all 代表"把这台电脑上所有能用的 GPU 都给这个容器用"
+              # 因为笔记本通常只有一块独立显卡,这里写 all 效果等同于只用这一块
+              count: all
+              # capabilities 声明这个设备需要具备的能力，[gpu] 表示"需要用到 GPU 计算能力"
+              capabilities: [gpu]
+
+    # command 用来指定容器启动时，在镜像默认的启动程序后面追加什么参数
+    # 这里等同于你之前手动敲的 docker run 命令最后那一段参数
+    # --model small：选择体积较小的识别模型，适合 4GB 显存的显卡，速度快、显存占用低
+    # --language zh：设定识别的语音语言为中文，如果想识别英语可以改成 en
+    # --target-language en：开启实时翻译功能
+    command: --model tiny --language zh
+
+    # restart 定义这个容器的"重启策略"
+    # unless-stopped 的意思是：只要你没有手动运行 docker stop 停止它,不管电脑重启、容器意外崩溃,都会自动重新启动这个容器
+    # 好处是你以后重启电脑,不需要每次手动重新执行 docker compose up,服务会自动恢复运行
+    restart: unless-stopped
+
+# volumes 这是顶层关键字（和最上面的 services 同级），用来正式"声明"前面用到的数据卷
+# 前面 volumes 那一行只是"引用"了 hf_cache 这个名字，这里才是真正创建这个数据卷
+# 如果不在这里声明，Compose 可能会报错找不到这个数据卷
+volumes:
+  hf_cache:
