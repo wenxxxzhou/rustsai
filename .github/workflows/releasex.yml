@@ -63,7 +63,7 @@ jobs:
           prerelease: false
           draft: false
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # ==========================================
   # 【未来扩展】项目 2：其他项目
@@ -89,4 +89,4 @@ jobs:
           prerelease: false
           draft: false
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
