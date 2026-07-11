@@ -34,8 +34,7 @@ body {
   inset: 0;
   z-index: 2;
   pointer-events: none;
-  background:
-    radial-gradient(circle at center, transparent 54%, rgba(0, 0, 0, 0.3) 100%);
+  background: radial-gradient(circle at center, transparent 54%, rgba(0, 0, 0, 0.3) 100%);
 }
 
 .scanlines {
@@ -45,16 +44,16 @@ body {
   pointer-events: none;
   opacity: 0.035;
   mix-blend-mode: screen;
-  background:
-    repeating-linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0.05) 0px,
-      rgba(255, 255, 255, 0.05) 1px,
-      transparent 1px,
-      transparent 5px
-    );
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.05) 0px,
+    rgba(255, 255, 255, 0.05) 1px,
+    transparent 1px,
+    transparent 5px
+  );
 }
 
+/* ===== HUD 基础样式（自带全尺寸自适应） ===== */
 .hud {
   position: fixed;
   left: 24px;
@@ -64,11 +63,19 @@ body {
   border: 1px solid var(--hud-border);
   border-radius: 12px;
   background: rgba(0, 18, 0, 0.14);
-  box-shadow:
-    0 0 14px rgba(0, 255, 80, 0.05),
-    inset 0 0 16px rgba(0, 255, 80, 0.025);
+  box-shadow: 0 0 14px rgba(0, 255, 80, 0.05), inset 0 0 16px rgba(0, 255, 80, 0.025);
   backdrop-filter: blur(2px);
+  /* 核心修改：使用 fit-content 让宽度自适应内容 */
+  width: fit-content;
+  /* 确保没有其他宽度设置覆盖 */
+  width: -moz-fit-content; /* Firefox 兼容 */
+  width: -webkit-fit-content; /* Chrome/Safari 兼容 */
+  /* 限制最大宽度，防止在宽屏幕上过宽 */
+  max-width: calc(100vw - 48px); 
+  box-sizing: border-box;
 }
+
+
 
 .hud__line {
   color: var(--hud-text);
@@ -76,7 +83,9 @@ body {
   line-height: 1.7;
   letter-spacing: 0.12em;
   text-shadow: 0 0 6px rgba(0, 255, 100, 0.1);
-  white-space: nowrap;
+  /* 核心自适应：允许换行，不管什么屏幕都不会撑爆 */
+  white-space: normal; 
+  word-break: break-all; 
 }
 
 .hud__line span {
@@ -90,19 +99,55 @@ body {
   transition: opacity 0.18s ease;
 }
 
+.hud__link {
+  color: var(--hud-strong);
+  font-style: italic;
+  text-decoration: none;
+  text-shadow: 0 0 8px rgba(120, 255, 160, 0.18);
+  transition: color 0.18s ease, text-shadow 0.18s ease;
+  cursor: pointer;
+}
+
+/* 在文字后面加上跳转箭头 */
+.hud__link::after {
+  content: " \2197";
+  font-style: normal;
+  display: inline-block;
+  transition: transform 0.18s ease;
+}
+
+/* hover 时变色，箭头向右上方跳动 */
+.hud__link:hover {
+  color: #FF06B5;
+  text-shadow: 0 0 10px rgba(255, 6, 181, 0.45);
+}
+
+.hud__link:hover::after {
+  transform: translate(2px, -2px);
+}
+
+/* ===== 移动端微调 (只改字号和边距) ===== */
 @media (max-width: 768px) {
   .hud {
-    left: 14px;
-    bottom: 14px;
+    left: 12px;
+    bottom: 12px;
     padding: 8px 10px;
+    max-width: calc(100vw - 24px);
   }
 
   .hud__line {
     font-size: 10px;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
   }
 
   .scanlines {
     opacity: 0.03;
+  }
+}
+
+@media (max-width: 375px) {
+  .hud__line {
+    font-size: 9px;
+    line-height: 1.5;
   }
 }
