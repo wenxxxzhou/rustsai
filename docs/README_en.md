@@ -24,3 +24,11 @@ ___
 ## _prop\WhisperLiveKitp
 
 - This is the Docker command for [WhisperLiveKitp](https://github.com/QuentinFuxa/WhisperLiveKit/pkgs/container/whisperlivekit "GitHub Packages");
+  
+___  
+
+## _prop\zqinfoss
+
+- A command-line tool for parsing Steam game links, automatically retrieving game names, and generating links to SteamDB and HLTB queries. It includes local caching to optimize query speed.
+- Build it, or download the EXE and double-click to run it.
+  - Quick start: Click the link in the top-left corner of the Steam client to copy it, then paste it directly into the CLI and press Enter to begin the query.

@@ -20,7 +20,7 @@ pub struct GameLinks {
 }
 
 // ============================================================
-// 辅助函数：路径与帮助信息
+// 辅助函数：路径、帮助信息与校验
 // ============================================================
 
 /// 获取默认的缓存文件路径：<exe目录>/caches/search_maps.json
@@ -30,7 +30,6 @@ fn get_default_cache_path() -> PathBuf {
             return exe_dir.join("caches").join("search_maps.json");
         }
     }
-    // 如果获取 exe 路径失败，退回到当前工作目录
     PathBuf::from("./caches/search_maps.json")
 }
 
@@ -64,12 +63,19 @@ fn print_help() {
     println!("  zqinfoss cache list");
 }
 
+/// 初步判断输入是否为 Steam 游戏链接
+/// 兼容 app / agecheck/app 两种路径，以及 http/https 协议
+fn is_valid_steam_url(input: &str) -> bool {
+    let lower = input.to_lowercase();
+    lower.contains("store.steampowered.com")
+        && (lower.contains("/app/") || lower.contains("agecheck/app/"))
+}
+
 // ============================================================
 // 缓存读写函数
 // ============================================================
 
 async fn load_cache(cache_path: &Path) -> HashMap<u32, String> {
-    // 确保目录存在
     if let Some(parent) = cache_path.parent() {
         let _ = fs::create_dir_all(parent).await;
     }
@@ -103,7 +109,6 @@ async fn save_cache(cache_path: &Path, cache: &HashMap<u32, String>) {
 // 缓存管理命令处理
 // ============================================================
 
-/// 处理 `zqinfoss cache ...` 命令
 async fn handle_cache_command(args: &[String]) {
     let cache_path = get_default_cache_path();
 
@@ -233,31 +238,46 @@ pub async fn generate_links(
     client: &reqwest::Client,
     progress_bar: &ProgressBar,
 ) -> Result<GameLinks, String> {
+    // 第一道门槛：快速拒绝明显非法输入
+    if !is_valid_steam_url(steam_url) {
+        return Err(
+            "无效输入：请提供形如 https://store.steampowered.com/app/<appid>/ 的链接".to_string(),
+        );
+    }
+
     progress_bar.set_message("正在解析 Steam URL...");
+
+    // 清理 URL 中的查询参数（如 ?snr=1_5_9__）
     let clean_url = steam_url.split('?').next().unwrap_or(steam_url);
+    // 按照 '/' 分割并过滤空字符串
     let parts: Vec<&str> = clean_url.split('/').filter(|p| !p.is_empty()).collect();
 
     let app_index = parts
         .iter()
         .position(|&p| p == "app")
-        .ok_or("Invalid Steam URL: URL 中未找到 'app' 路径段")?;
+        .ok_or("无效输入：这不是一个 Steam 游戏链接 (缺少 '/app/' 路径段)")?;
 
-    if app_index + 2 >= parts.len() {
-        return Err("URL 结构不完整：缺少 appid 或 slug 段".to_string());
+    if app_index + 1 >= parts.len() {
+        return Err("URL 结构不完整：在 '/app/' 之后未找到 appid".to_string());
     }
 
-    let appid: u32 = parts[app_index + 1].parse().map_err(|_| {
-        format!(
-            "Invalid appid: 无法将 '{}' 解析为数字",
-            parts[app_index + 1]
-        )
-    })?;
+    let appid: u32 = parts[app_index + 1]
+        .parse()
+        .map_err(|_| format!("无效的 appid：无法将 '{}' 解析为数字", parts[app_index + 1]))?;
 
-    let raw_slug = parts[app_index + 2];
+    // 优化点：如果 "app" 后面没有 slug (比如 https://store.steampowered.com/app/730/)
+    // 则 raw_slug 设为空字符串，让程序自动去走缓存或网络查询逻辑
+    let raw_slug = if app_index + 2 < parts.len() {
+        parts[app_index + 2]
+    } else {
+        ""
+    };
+
     let cleaned_name = raw_slug
         .trim_matches('_')
         .replace('_', " ")
         .replace("  ", " ");
+    // 根据你的要求，去除了 /charts/ 后缀
     let steamdb_url = format!("https://steamdb.info/app/{}/", appid);
 
     if !cleaned_name.is_empty() {
@@ -309,7 +329,7 @@ pub async fn generate_links(
 }
 
 // ============================================================
-// 程序入口
+// 程序入口与运行模式
 // ============================================================
 
 #[tokio::main]
@@ -335,7 +355,6 @@ async fn main() {
     }
 
     // 4. 处理正常查询逻辑
-    // 如果只传了 URL，使用默认缓存路径
     let cache_path = if args.len() == 2 {
         get_default_cache_path()
     } else if args.len() == 3 {
@@ -390,7 +409,6 @@ async fn run_interactive_mode() {
     println!("    输入 exit 退出程序");
     println!("==================================\n");
 
-    // 初始路径设为默认路径
     let mut current_cache_path = get_default_cache_path();
     println!("提示：当前缓存保存在 {}\n", current_cache_path.display());
 
@@ -406,19 +424,16 @@ async fn run_interactive_mode() {
             continue;
         }
 
-        // 退出命令
         if input.eq_ignore_ascii_case("exit") {
             break;
         }
 
-        // 查看帮助命令
         if input.eq_ignore_ascii_case("help") || input == "?" {
-            print_help(); // 调用之前写好的打印帮助函数
-            println!(); // 额外打印一个空行保持排版美观
+            print_help();
+            println!();
             continue;
         }
 
-        // 修改路径命令
         if input.eq_ignore_ascii_case("setpath") {
             print!("请输入新的缓存文件完整路径 (例如 D:\\my_cache.json): ");
             let _ = io::stdout().flush();
@@ -437,7 +452,6 @@ async fn run_interactive_mode() {
             continue;
         }
 
-        // 如果不是内部命令，当作 URL 执行查询
         run_query(input, &current_cache_path).await;
         println!("\n-----------------------------\n");
     }

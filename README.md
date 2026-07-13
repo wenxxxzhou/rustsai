@@ -22,3 +22,12 @@ ___
 ## _prop\WhisperLiveKitp
 
 - 这是 [WhisperLiveKitp](https://github.com/QuentinFuxa/WhisperLiveKit/pkgs/container/whisperlivekit "GitHub Packages") 的 docker 执行命令；
+
+___
+
+## _prop\zqinfoss
+
+- 一个用于解析 Steam 游戏链接，自动获取游戏名并生成 SteamDB 与 HLTB 查询链接的命令行工具，内置本地缓存以优化查询速度
+- 构建
+- 或下载 EXE 后双击运行
+  - 简单开始：单击 steam 客户端左上链接进行复制，直接粘贴进 CLI 中并 enter 开始查询
