@@ -1,6 +1,7 @@
 const projectNames = [
-  "edl2srt @zai-org/GLM-5.2",
-  "WhisperLiveKitp @Claude Sonnet 5"
+  "edl2srt @GLM-5.2",
+  "WhisperLiveKitp @Claude Sonnet 5",
+  "qinfoss @GLM-5.2",
 ];
 
 const canvas = document.getElementById("matrixCanvas");
