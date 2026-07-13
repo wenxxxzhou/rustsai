@@ -7,17 +7,12 @@
 
 ## [Unreleased]
 
-## [edl2srt-v2.0.2] - 2026/07/12 00:49:02
+## [zqinfoss-v1.0.0] - 2026/07/13 16:07:18
 
 ### AI
 
-- [zai-org/GLM-5.2](https://huggingface.co/zai-org/GLM-5.2 "HF")
+- GLM-5.2
 
 ### Added
 
-- 完成 GLM-5.2 改写 EDL 转 SRT 功能
-- 支持 Windows x64 编译
-
-### Fixed
-
-- 修复时间戳解析的边界问题
+- 一个用于解析 Steam 游戏链接，自动获取游戏名并生成 SteamDB 与 HLTB 查询链接的命令行工具，内置本地缓存以优化查询速度。

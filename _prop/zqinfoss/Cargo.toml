@@ -1,0 +1,23 @@
+[package]
+name = "zqinfoss"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+# 异步运行时，Rust 生态中最主流的异步框架
+# features = ["full"] 表示启用所有功能（文件IO、网络IO、时间等）
+tokio = { version = "1.0", features = ["full"] }
+
+# HTTP 客户端库，用于向 Steam API 发送 GET 请求
+# features = ["json"] 启用 JSON 自动反序列化功能
+reqwest = { version = "0.11", features = ["json"] }
+
+# 序列化/反序列化框架，用于读写 cache.json 以及输出最终结果
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# URL 编码库，用于将游戏名中的空格等特殊字符编码为 %20 等格式
+urlencoding = "2.1"
+
+# 终端进度指示库，提供转圈动画和状态文字
+indicatif = "0.17"
